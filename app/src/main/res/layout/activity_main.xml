@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="236dp"
+        android:layout_height="45dp"
+        android:layout_marginStart="87dp"
+        android:layout_marginTop="36dp"
+        android:layout_marginEnd="88dp"
+        android:text="ℕ𝕖𝕧𝕠'𝕤 𝕋𝕣𝕚𝕧𝕚𝕒"
+        android:textAlignment="center"
+        android:textColor="#000000"
+        android:textSize="36sp"
+        android:textStyle="bold|italic"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="110dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="52dp"
+        android:layout_marginEnd="196dp"
+        android:text="Enter Name:"
+        android:textColor="#000000"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="@+id/textView"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+    <EditText
+        android:id="@+id/editTextTextPersonName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:ems="10"
+        android:hint="Enter Name"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toBottomOf="@+id/textView2"
+        app:layout_constraintStart_toEndOf="@+id/textView2"
+        app:layout_constraintTop_toTopOf="@+id/textView2" />
+
+    <Button
+        android:id="@+id/download"
+        android:layout_width="165dp"
+        android:layout_height="54dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/mybutton"
+        android:onClick="goToSite"
+        android:text="Bibi's Adventure"
+        android:textColor="#000000"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <ImageButton
+        android:id="@+id/continued"
+        android:layout_width="111dp"
+        android:layout_height="47dp"
+        android:layout_marginStart="144dp"
+        android:layout_marginTop="340dp"
+        android:background="@drawable/rounded_rectangle"
+        app:layout_constraintStart_toStartOf="@+id/editTextTextPersonName"
+        app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="82dp"
+        android:layout_height="22dp"
+        android:text="Continue"
+        android:textAlignment="center"
+        android:textColor="#000000"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/continued"
+        app:layout_constraintEnd_toEndOf="@+id/continued"
+        app:layout_constraintStart_toStartOf="@+id/continued"
+        app:layout_constraintTop_toTopOf="@+id/continued" />
+
+    <ImageButton
+        android:id="@+id/button4"
+        android:layout_width="150dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/topicbutton"
+        android:text="Button"
+        app:layout_constraintEnd_toEndOf="@+id/button3"
+        app:layout_constraintStart_toStartOf="@+id/button3"
+        app:layout_constraintTop_toBottomOf="@+id/button3" />
+
+    <ImageButton
+        android:id="@+id/button2"
+        android:layout_width="150dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="48dp"
+        android:background="@drawable/topicbutton"
+        android:text="Button"
+        app:layout_constraintEnd_toEndOf="@+id/textView"
+        app:layout_constraintStart_toStartOf="@+id/textView"
+        app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName" />
+
+    <ImageButton
+        android:id="@+id/button3"
+        android:layout_width="150dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/topicbutton"
+        android:text="Button"
+        app:layout_constraintEnd_toEndOf="@+id/button"
+        app:layout_constraintStart_toStartOf="@+id/button"
+        app:layout_constraintTop_toBottomOf="@+id/button" />
+
+    <ImageButton
+        android:id="@+id/button"
+        android:layout_width="150dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/topicbutton"
+        android:text="Button"
+        app:layout_constraintEnd_toEndOf="@+id/button2"
+        app:layout_constraintStart_toStartOf="@+id/button2"
+        app:layout_constraintTop_toBottomOf="@+id/button2" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
