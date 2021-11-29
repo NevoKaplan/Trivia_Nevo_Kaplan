@@ -10,18 +10,20 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener {
 
-    private Menu menu;
-
+    private String player;
+    TextView p1Text;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ImageButton contin = findViewById(R.id.continued);
-        contin.setOnClickListener(this::OnClick);
+        Button contin = findViewById(R.id.continued);
+        contin.setOnClickListener(this);
+        p1Text = findViewById(R.id.editTextTextPersonName);
     }
 
 
@@ -35,10 +37,23 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         startActivity(launchBrowser);
     }
 
-    public void OnClick(View view) {
+    public void continueClick() {
+        player = "player";
         Intent intent = new Intent(this, game.class);
+        if (!(p1Text.getText().toString().matches(""))) {
+            player = p1Text.getText().toString();
+        }
+        intent.putExtra("player", player);
+        startActivityForResult(intent, 4);
+
     }
 
     @Override
-    public void home() {}
+    public void home() {} // so home button won't exit application
+
+    @Override
+    public void onClick(View view) {
+        if (view.getId() == R.id.continued)
+            continueClick();
+    }
 }

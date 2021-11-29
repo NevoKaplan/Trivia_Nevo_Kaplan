@@ -1,10 +1,8 @@
 package com.example.trivia;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 
-public class game extends AppCompatActivity {
+public class game extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

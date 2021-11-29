@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:background="@drawable/main_background">
 
     <TextView
         android:id="@+id/textView"
@@ -39,6 +40,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
+        android:autofillHints="Enter Name"
         android:ems="10"
         android:hint="Enter Name"
         android:inputType="textPersonName"
@@ -57,30 +59,19 @@
         android:text="Bibi's Adventure"
         android:textColor="#000000"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/button4" />
 
-    <ImageButton
+    <Button
         android:id="@+id/continued"
-        android:layout_width="111dp"
-        android:layout_height="47dp"
-        android:layout_marginStart="144dp"
-        android:layout_marginTop="340dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
         android:background="@drawable/rounded_rectangle"
-        app:layout_constraintStart_toStartOf="@+id/editTextTextPersonName"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName" />
-
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="82dp"
-        android:layout_height="22dp"
         android:text="Continue"
-        android:textAlignment="center"
-        android:textColor="#000000"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="@+id/continued"
-        app:layout_constraintEnd_toEndOf="@+id/continued"
-        app:layout_constraintStart_toStartOf="@+id/continued"
-        app:layout_constraintTop_toTopOf="@+id/continued" />
+        app:layout_constraintEnd_toEndOf="@+id/download"
+        app:layout_constraintTop_toBottomOf="@+id/button4" />
 
     <ImageButton
         android:id="@+id/button4"
@@ -97,7 +88,7 @@
         android:id="@+id/button2"
         android:layout_width="150dp"
         android:layout_height="55dp"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="56dp"
         android:background="@drawable/topicbutton"
         android:text="Button"
         app:layout_constraintEnd_toEndOf="@+id/textView"
