@@ -1,10 +1,16 @@
 package com.example.trivia;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.media.AudioAttributes;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.media.SoundPool;
+import android.os.Build;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -24,8 +30,8 @@ public class game extends BaseActivity implements View.OnClickListener{
     Toast toast;
     AlertDialog alert;
     long start;
-    MediaPlayer playSoundCorrect;
-    MediaPlayer playSoundIncorrect;
+    SoundPool soundPool;
+    private int correct_sound, incorrect_sound;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,8 +42,22 @@ public class game extends BaseActivity implements View.OnClickListener{
         toast = Toast.makeText(getApplicationContext(), "", Toast.LENGTH_SHORT);
         answer = "hello Dvir";
 
-        playSoundCorrect = MediaPlayer.create(this, R.raw.correct_sound);
-        playSoundIncorrect = MediaPlayer.create(this, R.raw.incorrect_sound);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            AudioAttributes audioAttributes = new AudioAttributes.Builder()
+                    .setUsage(AudioAttributes.USAGE_ASSISTANCE_SONIFICATION)
+                    .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                    .build();
+
+            soundPool = new SoundPool.Builder()
+                    .setMaxStreams(4)
+                    .setAudioAttributes(audioAttributes)
+                    .build();
+        }
+        else {
+            soundPool = new SoundPool(4, AudioManager.STREAM_MUSIC, 0);
+        }
+        correct_sound = soundPool.load(this, R.raw.correct_sound, 1);
+        incorrect_sound = soundPool.load(this, R.raw.incorrect_sound, 1);
 
         ImageButton one = findViewById(R.id.one);
         ImageButton two = findViewById(R.id.two);
@@ -56,7 +76,7 @@ public class game extends BaseActivity implements View.OnClickListener{
         playerName = intent.getStringExtra("player");
         ((TextView)findViewById(R.id.name)).setText(playerName);
         builder.setCancelable(false);
-        builder.setTitle("Well Played");
+        builder.setTitle("Well Played, " + playerName + "!");
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -69,10 +89,13 @@ public class game extends BaseActivity implements View.OnClickListener{
         shuffle();
 
         start = System.currentTimeMillis();
+
+        super.play(intent.getIntExtra("currentPos", 0));
     }
 
     public void shuffle() {
         Question current = controller.createQuestion();
+        int questionNumber = controller.getQuestionNum();
         if (current != null) {
             question.setText(current.getQuestion());
             realAnswer = current.getAnswer();
@@ -82,11 +105,11 @@ public class game extends BaseActivity implements View.OnClickListener{
             ((TextView) findViewById(R.id.twoAnswer)).setText(replies[1]);
             ((TextView) findViewById(R.id.threeAnswer)).setText(replies[2]);
             ((TextView) findViewById(R.id.fourAnswer)).setText(replies[3]);
-            ((TextView) findViewById(R.id.textView3)).setText("Question #" + controller.getQuestionNum());
+            ((TextView) findViewById(R.id.textView3)).setText("Question #" + questionNumber);
         }
         else {
             long end = System.currentTimeMillis();
-            alert.setMessage(playerName + ", you answered all the questions.\nYour time is: " + (Math.round((((end - start) / 1000.0) * 100.0))/100.0) + " seconds.");
+            alert.setMessage("You answered " + (controller.getScore()/10) + "/" + questionNumber + " questions correctly.\nYour time is: " + (Math.round((((end - start) / 1000.0) * 100.0))/100.0) + " seconds.");
             alert.show();
         }
     }
@@ -141,13 +164,11 @@ public class game extends BaseActivity implements View.OnClickListener{
             if (answer.equals(realAnswer)) {
                 controller.addScore(10);
                 toast.setText("Correct! ( ͡ʘ ͜ʖ ͡ʘ)");
-                if (soundOn)
-                    playSoundCorrect.start();
+                soundPool.play(correct_sound, 1, 1, 0, 0, 1);
             }
             else {
                 toast.setText("Incorrect ( ͡° ʖ̯ ͡°)");
-                if (soundOn)
-                    playSoundIncorrect.start();
+                soundPool.play(incorrect_sound, 1, 1, 0, 0, 1);
             }
             ((TextView)findViewById(R.id.scoreText)).setText("Score: " + controller.getScore());
             ((ImageButton)findViewById(R.id.one)).setBackground(getDrawable(R.drawable.topicbutton));
@@ -168,4 +189,26 @@ public class game extends BaseActivity implements View.OnClickListener{
         super.onStop();
         toast.cancel();
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        soundPool.release();
+        soundPool = null;
+    }
+
+    @Override
+    public void home() {
+        Intent intentR = new Intent();
+        intentR.putExtra("currentPos", mediaPlayer.getCurrentPosition());
+        mediaPlayer.pause();
+        setResult(Activity.RESULT_OK, intentR);
+        finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+        home();
+    }
+
 }
