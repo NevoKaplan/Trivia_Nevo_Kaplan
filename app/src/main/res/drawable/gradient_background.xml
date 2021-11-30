@@ -5,13 +5,10 @@
             android:shape="rectangle">
 
             <gradient
-                android:type="radial"
-                android:centerX="50%"
-                android:centerY="50%"
-                android:startColor="#8AEE82EE"
-                android:centerColor="#AF42C1"
-                android:endColor="#0D0DFF"
-                android:gradientRadius="100%"
+                android:type="linear"
+                android:startColor="#00FFEB"
+                android:endColor="#073ABB"
+                android:angle="0"
                 />
 
         </shape>

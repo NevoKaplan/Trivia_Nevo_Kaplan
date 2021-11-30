@@ -28,7 +28,7 @@
         android:layout_width="110dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="52dp"
-        android:layout_marginEnd="196dp"
+        android:layout_marginEnd="184dp"
         android:text="Enter Name:"
         android:textColor="#000000"
         android:textSize="20sp"

@@ -4,16 +4,19 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/nevok/AndroidStudioProjects/Trivia/app/src/main/res/drawable/background_gradient.xml" value="0.3494791666666667" />
+        <entry key="..\:/Users/nevok/AndroidStudioProjects/Trivia/app/src/main/res/drawable/gradient_background.xml" value="0.3494791666666667" />
         <entry key="..\:/Users/nevok/AndroidStudioProjects/Trivia/app/src/main/res/drawable/ic_search_black_24dp.xml" value="0.30833333333333335" />
         <entry key="..\:/Users/nevok/AndroidStudioProjects/Trivia/app/src/main/res/drawable/main_background.xml" value="0.3494791666666667" />
         <entry key="..\:/Users/nevok/AndroidStudioProjects/Trivia/app/src/main/res/drawable/mybutton.xml" value="0.30833333333333335" />
+        <entry key="..\:/Users/nevok/AndroidStudioProjects/Trivia/app/src/main/res/drawable/myclicked.xml" value="0.3494791666666667" />
         <entry key="..\:/Users/nevok/AndroidStudioProjects/Trivia/app/src/main/res/drawable/rounded_rectangle.xml" value="0.30833333333333335" />
         <entry key="..\:/Users/nevok/AndroidStudioProjects/Trivia/app/src/main/res/drawable/topicbutton.xml" value="0.33" />
+        <entry key="..\:/Users/nevok/AndroidStudioProjects/Trivia/app/src/main/res/drawable/topicbuttonclicked.xml" value="0.3494791666666667" />
         <entry key="..\:/Users/nevok/AndroidStudioProjects/Trivia/app/src/main/res/layout-w1240dp/activity_login.xml" value="0.242578125" />
         <entry key="..\:/Users/nevok/AndroidStudioProjects/Trivia/app/src/main/res/layout-w936dp/activity_login.xml" value="0.33" />
-        <entry key="..\:/Users/nevok/AndroidStudioProjects/Trivia/app/src/main/res/layout/activity_game.xml" value="0.32916666666666666" />
+        <entry key="..\:/Users/nevok/AndroidStudioProjects/Trivia/app/src/main/res/layout/activity_game.xml" value="0.5" />
         <entry key="..\:/Users/nevok/AndroidStudioProjects/Trivia/app/src/main/res/layout/activity_login.xml" value="0.28802083333333334" />
-        <entry key="..\:/Users/nevok/AndroidStudioProjects/Trivia/app/src/main/res/layout/activity_main.xml" value="0.5" />
+        <entry key="..\:/Users/nevok/AndroidStudioProjects/Trivia/app/src/main/res/layout/activity_main.xml" value="0.33" />
         <entry key="..\:/Users/nevok/AndroidStudioProjects/Trivia/app/src/main/res/menu/main_menu.xml" value="0.9894179894179894" />
       </map>
     </option>

@@ -8,12 +8,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class BaseActivity extends AppCompatActivity {
     Menu menu;
+    boolean soundOn;
     // Activity code here
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu, menu);
         this.menu = menu;
+        this.soundOn = true;
         return true;
 
     }
@@ -23,10 +25,14 @@ public class BaseActivity extends AppCompatActivity {
         int id = item.getItemId();
         if (id == R.id.item_music) {
             MenuItem music = menu.findItem(R.id.item_music);
-            if (music.getIcon().getConstantState().equals((getDrawable(R.drawable.sound_off).getConstantState())))
+            if (music.getIcon().getConstantState().equals((getDrawable(R.drawable.sound_off).getConstantState()))) {
                 music.setIcon(R.drawable.sound_on);
-            else
+                this.soundOn = false;
+            }
+            else {
                 music.setIcon(R.drawable.sound_off);
+                this.soundOn = true;
+            }
         }
 
         else if (id == R.id.item_exit) {
@@ -45,5 +51,7 @@ public class BaseActivity extends AppCompatActivity {
         super.onStop();
     }
 
-    public void home() { finish(); }
+    public void home() {
+        finish();
+    }
 }
