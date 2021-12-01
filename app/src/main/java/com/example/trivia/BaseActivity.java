@@ -62,6 +62,7 @@ public class BaseActivity extends AppCompatActivity {
     public void play() {
         if (mediaPlayer == null) {
             mediaPlayer = MediaPlayer.create(this, R.raw.instrumental);
+            mediaPlayer.setLooping(true);
         }
         mediaPlayer.start();
     }

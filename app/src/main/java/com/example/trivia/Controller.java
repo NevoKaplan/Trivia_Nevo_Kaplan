@@ -6,16 +6,20 @@ public class Controller {
     private Model model;
 
     public Controller() {
-        model = new Model();
+        this.model = new Model();
     }
 
-    public Question createQuestion() { return model.createQuestion(); }
+    public Question createQuestion() { return this.model.createQuestion(); }
 
-    public void addScore(int score) { model.addScore(score); }
+    public void addScore(int score) { this.model.addScore(score); }
 
-    public int getScore() { return model.getScore(); }
+    public int getScore() { return this.model.getScore(); }
 
     public int getQuestionNum() {
-        return model.getQuestionNum();
+        return this.model.getQuestionNum();
+    }
+
+    public int getQuestionLen() {
+        return this.model.getQuestionLen();
     }
 }

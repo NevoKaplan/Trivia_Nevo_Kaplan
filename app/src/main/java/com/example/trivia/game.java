@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,7 +32,7 @@ public class game extends BaseActivity implements View.OnClickListener{
     AlertDialog alert;
     long start;
     SoundPool soundPool;
-    private int correct_sound, incorrect_sound;
+    private int correct_sound, incorrect_sound, length, chosen, lives;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +42,22 @@ public class game extends BaseActivity implements View.OnClickListener{
         controller = new Controller();
         toast = Toast.makeText(getApplicationContext(), "", Toast.LENGTH_SHORT);
         answer = "hello Dvir";
-
+        Intent intent = getIntent();
+        chosen = intent.getIntExtra("chosen", 1);
+        length = controller.getQuestionLen();
+        switch (chosen) {
+            case 1:
+                length = 10;
+                break;
+            case 2:
+                ((ImageView)findViewById(R.id.heartOne)).setVisibility(View.VISIBLE);
+                ((ImageView)findViewById(R.id.heartTwo)).setVisibility(View.VISIBLE);
+                ((ImageView)findViewById(R.id.heartThree)).setVisibility(View.VISIBLE);
+                lives = 3;
+                break;
+            default:
+                break;
+        }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             AudioAttributes audioAttributes = new AudioAttributes.Builder()
                     .setUsage(AudioAttributes.USAGE_ASSISTANCE_SONIFICATION)
@@ -72,7 +88,6 @@ public class game extends BaseActivity implements View.OnClickListener{
         locked.setOnClickListener(this::locked);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        Intent intent = getIntent();
         playerName = intent.getStringExtra("player");
         ((TextView)findViewById(R.id.name)).setText(playerName);
         builder.setCancelable(false);
@@ -81,22 +96,21 @@ public class game extends BaseActivity implements View.OnClickListener{
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
-                finish();
+                home();
             }
         });
         alert = builder.create();
 
-        shuffle();
-
+        shuffle(true);
         start = System.currentTimeMillis();
 
         super.play(intent.getIntExtra("currentPos", 0));
     }
 
-    public void shuffle() {
+    public void shuffle(boolean flag) {
         Question current = controller.createQuestion();
         int questionNumber = controller.getQuestionNum();
-        if (current != null) {
+        if (flag && current != null && questionNumber <= length) {
             question.setText(current.getQuestion());
             realAnswer = current.getAnswer();
             String[] replies = current.getRe();
@@ -109,7 +123,7 @@ public class game extends BaseActivity implements View.OnClickListener{
         }
         else {
             long end = System.currentTimeMillis();
-            alert.setMessage("You answered " + (controller.getScore()/10) + "/" + questionNumber + " questions correctly.\nYour time is: " + (Math.round((((end - start) / 1000.0) * 100.0))/100.0) + " seconds.");
+            alert.setMessage("You answered " + (controller.getScore()/10) + "/" + length + " questions correctly.\nYour time is: " + (Math.round((((end - start) / 1000.0) * 100.0))/100.0) + " seconds.");
             alert.show();
         }
     }
@@ -160,6 +174,7 @@ public class game extends BaseActivity implements View.OnClickListener{
     }
 
     public void locked(View view) {
+        boolean flag = true;
         if (!answer.equals("hello Dvir")) {
             if (answer.equals(realAnswer)) {
                 controller.addScore(10);
@@ -169,6 +184,22 @@ public class game extends BaseActivity implements View.OnClickListener{
             else {
                 toast.setText("Incorrect ( ͡° ʖ̯ ͡°)");
                 soundPool.play(incorrect_sound, 1, 1, 0, 0, 1);
+                if (chosen == 2) {
+                    lives--;
+                    switch (lives) {
+                        case 2:
+                            ((ImageView)findViewById(R.id.heartOne)).setVisibility(View.INVISIBLE);
+                            break;
+                        case 1:
+                            ((ImageView)findViewById(R.id.heartTwo)).setVisibility(View.INVISIBLE);
+                            break;
+                        default:
+                            ((ImageView)findViewById(R.id.heartThree)).setVisibility(View.INVISIBLE);
+                            alert.setTitle("Nice Try");
+                            flag = false;
+                            break;
+                    }
+                }
             }
             ((TextView)findViewById(R.id.scoreText)).setText("Score: " + controller.getScore());
             ((ImageButton)findViewById(R.id.one)).setBackground(getDrawable(R.drawable.topicbutton));
@@ -176,7 +207,7 @@ public class game extends BaseActivity implements View.OnClickListener{
             ((ImageButton)findViewById(R.id.three)).setBackground(getDrawable(R.drawable.topicbutton));
             ((ImageButton)findViewById(R.id.four)).setBackground(getDrawable(R.drawable.topicbutton));
             answer = "hello Dvir";
-            shuffle();
+            shuffle(flag);
         }
         else
             toast.setText("Select an answer");

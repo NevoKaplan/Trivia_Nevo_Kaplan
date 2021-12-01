@@ -23,18 +23,6 @@ public class Question {
         return this.answer;
     }
 
-    public String getW1() {
-        return this.w1;
-    }
-
-    public String getW2() {
-        return this.w2;
-    }
-
-    public String getW3() {
-        return this.w3;
-    }
-
     public String[] getRe() {
         return new String[]{this.answer, this.w1, this.w2, this.w3};
     }
