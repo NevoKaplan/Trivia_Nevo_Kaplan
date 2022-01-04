@@ -4,17 +4,15 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.AudioAttributes;
 import android.media.AudioManager;
-import android.media.MediaPlayer;
 import android.media.SoundPool;
 import android.os.Build;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,6 +42,11 @@ public class game extends BaseActivity implements View.OnClickListener{
         answer = "hello Dvir";
         Intent intent = getIntent();
         chosen = intent.getIntExtra("chosen", 1);
+        hasUser = intent.getBooleanExtra("hasUser", false);
+        count = intent.getIntArrayExtra("count");
+        scores = intent.getFloatArrayExtra("scores");
+        user_name = intent.getStringExtra("username");
+        sp = getSharedPreferences("details", 0);
         length = controller.getQuestionLen();
         switch (chosen) {
             case 1:
@@ -60,8 +63,8 @@ public class game extends BaseActivity implements View.OnClickListener{
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             AudioAttributes audioAttributes = new AudioAttributes.Builder()
-                    .setUsage(AudioAttributes.USAGE_ASSISTANCE_SONIFICATION)
-                    .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                    .setUsage(AudioAttributes.USAGE_GAME)
+                    .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
                     .build();
 
             soundPool = new SoundPool.Builder()
@@ -88,7 +91,7 @@ public class game extends BaseActivity implements View.OnClickListener{
         locked.setOnClickListener(this::locked);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        playerName = intent.getStringExtra("player");
+        playerName = user_name;
         ((TextView)findViewById(R.id.name)).setText(playerName);
         builder.setCancelable(false);
         builder.setTitle("Well Played, " + playerName + "!");
@@ -123,7 +126,16 @@ public class game extends BaseActivity implements View.OnClickListener{
         }
         else {
             long end = System.currentTimeMillis();
-            alert.setMessage("You answered " + (controller.getScore()/10) + "/" + length + " questions correctly.\nYour time is: " + (Math.round((((end - start) / 1000.0) * 100.0))/100.0) + " seconds.");
+            float len = (float)(Math.round((((end - start) / 1000.0) * 100.0))/100.0);
+            int questionsAnswered = (controller.getScore()/10);
+            if (hasUser && scores[chosen-1] > len && questionsAnswered == length) {
+                System.out.println("here");
+                scores[chosen-1] = len;
+                SharedPreferences.Editor editor = sp.edit();
+                editor.putFloat("scores_" + (chosen-1), scores[chosen-1]);
+                editor.commit();
+            }
+            alert.setMessage("You answered " + questionsAnswered + "/" + length + " questions correctly.\nYour time is: " + len + " seconds.");
             alert.show();
         }
     }
@@ -232,6 +244,7 @@ public class game extends BaseActivity implements View.OnClickListener{
     public void home() {
         Intent intentR = new Intent();
         intentR.putExtra("currentPos", mediaPlayer.getCurrentPosition());
+        intentR.putExtra("scores", scores);
         mediaPlayer.pause();
         setResult(Activity.RESULT_OK, intentR);
         finish();

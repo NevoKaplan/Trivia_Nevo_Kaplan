@@ -1,25 +1,24 @@
 package com.example.trivia;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.view.menu.ActionMenuItemView;
-
-import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.Intent;
-import android.media.MediaPlayer;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.os.Parcelable;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
 public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     private String player;
-    TextView p1Text;
+    private String password;
     int chosen;
+    Dialog d;
 
 
     @Override
@@ -39,7 +38,20 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
         chosen = 1;
 
-        p1Text = findViewById(R.id.editTextTextPersonName);
+
+        sp = getSharedPreferences("details", 0);
+        player = sp.getString("name", "player");
+        password = sp.getString("pass", "");
+        count = new int[3];
+        for(int i=0;i<3;i++)
+            count[i] = sp.getInt("count_" + i, 0);
+
+        scores = new float[3];
+        for(int i=0;i<3;i++)
+            scores[i] = sp.getFloat("scores_" + i, 360000);
+        hasUser = false;
+        createLoginDialog();
+
         super.play(0);
     }
 
@@ -55,20 +67,24 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     }
 
     public void continueClick() {
-        player = "player";
         Intent intent = new Intent(this, game.class);
+        intent.putExtra("chosen", chosen);
+        if (hasUser) {
+            count[chosen-1]++;
+            SharedPreferences.Editor editor = sp.edit();
+            editor.putInt("count_" + (chosen-1), count[chosen-1]);
+            editor.commit();
+        }
+        intent.putExtra("hasUser", hasUser);
+        intent.putExtra("count", count);
+        intent.putExtra("scores", scores);
+        intent.putExtra("username", user_name);
         if (mediaPlayer != null) {
             int currentPos = mediaPlayer.getCurrentPosition();
             mediaPlayer.pause();
             intent.putExtra("currentPos", currentPos);
         }
-        if (!(p1Text.getText().toString().matches(""))) {
-            player = p1Text.getText().toString();
-        }
-        intent.putExtra("chosen", chosen);
-        intent.putExtra("player", player);
         startActivityForResult(intent, 4);
-
     }
 
     @Override
@@ -95,16 +111,41 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 ((ImageButton)findViewById(R.id.Basic)).setBackground(getDrawable(R.drawable.topicbuttonclicked));
                 chosen = 3;
                 break;
-            default: // four
+            default:
                 continueClick();
                 break;
         }
     }
 
+
+    public void clickDialog(View view) {
+        player = ((TextView)d.findViewById(R.id.enterName)).getText().toString();
+        password = ((TextView)d.findViewById(R.id.enterPass)).getText().toString();
+        // clicked on enter and the texts aren't empty
+        if ((hasUser || (view.getId() == R.id.enter) && (!player.matches("player") && !password.matches("")))) {
+            // create user or edit user details
+            SharedPreferences.Editor editor = sp.edit();
+            editor.putString("name", player);
+            editor.putString("pass", password);
+            user_name = player;
+            editor.commit();
+            hasUser = true;
+        }
+
+        else {
+            hasUser = false;
+            user_name = "player";
+        }
+
+        d.dismiss();
+    }
+
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         super.play(data.getIntExtra("currentPos", 0));
+        scores = data.getFloatArrayExtra("scores");
     }
 
 
@@ -113,4 +154,20 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     protected void onStop () {
         super.onStop();
         }
+
+    public void createLoginDialog() {
+        d = new Dialog(this);
+
+        d.setContentView(R.layout.custom_dialog);
+        d.setTitle("Login");
+        d.setCancelable(false);
+        ((Button)d.findViewById(R.id.enter)).setOnClickListener(this::clickDialog);
+        ((Button)d.findViewById(R.id.skip)).setOnClickListener(this::clickDialog);
+        if (!(player.equals("player")) && !(password.equals(""))) {
+            hasUser = true;
+        }
+        ((TextView)d.findViewById(R.id.enterName)).setText(player);
+        ((TextView)d.findViewById(R.id.enterPass)).setText(password);
+        d.show();
+    }
 }
